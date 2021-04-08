@@ -3,9 +3,9 @@ import { ParentContainer } from "./components/ParentContainer";
 
 export const Tab = createBottomTabNavigator();
 
-export default function App() {
+export const App = () => {
   return (
-    ParentContainer()
+    <ParentContainer />
   );
 }
 
