@@ -1,11 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import Button from "./components/TestPage";
 import { StyleSheet, Text, View } from "react-native";
+import TestPage from "./components/TestPage";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>asdf</Text>
+      <Text>asdfff</Text>
+      <TestPage />
       <StatusBar style="auto" />
     </View>
   );
