@@ -1,8 +1,8 @@
 import * as React from "react";
+import { Tab } from "../App";
 import { NavigationContainer } from "@react-navigation/native";
 import { RejectedJobs } from "./RejectedJobs";
 import { SavedJobs } from "./SavedJobs";
-import { Tab } from "../App";
 import { SwipeForJobs } from "./SwipeForJobs";
 import { SearchForJobs } from "./SearchForJobs";
 
