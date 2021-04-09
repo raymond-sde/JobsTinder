@@ -3,7 +3,6 @@ import { Tab } from "../App";
 import { NavigationContainer } from "@react-navigation/native";
 import { RejectedJobs } from "./RejectedJobs";
 import { SavedJobs } from "./SavedJobs";
-import { SwipeForJobs } from "./SwipeForJobs";
 import { SearchForJobs } from "./SearchForJobs";
 
 export const ParentContainer = () => {
@@ -11,10 +10,9 @@ export const ParentContainer = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Search Jobs" component={SearchForJobs} />
-        <Tab.Screen name="Swipe Jobs" component={SwipeForJobs} />
         <Tab.Screen name="Saved Jobs" component={SavedJobs} />
         <Tab.Screen name="Rejected Jobs" component={RejectedJobs} />
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};

@@ -1,4 +1,6 @@
-export const jobs = [
+import { Job } from "./components/Job";
+
+export const jobs: Job[] = [
   {
     id: "93428106-7d90-4811-8a6d-8a3de20871cb",
     type: "Full Time",
