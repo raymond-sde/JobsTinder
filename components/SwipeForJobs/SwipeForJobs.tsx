@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { JobCard } from "../JobCard/JobCard";
 import { styles, overlayLabels } from "./styles";
 import { Job } from "../Job";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type SwipeForJobsProps = {
   jobs: Job[];
