@@ -8,24 +8,7 @@ export const SearchForJobs = () => {
   const [data, setData] = useState([]);
 
   const handleSearch = () => {
-    let formattedJobs = "";
-    for (const letter of jobs) {
-      if (letter === " ") {
-        formattedJobs += "+";
-      } else {
-        formattedJobs += letter;
-      }
-    }
-
-    let formattedLocation = "";
-    for (const letter of location) {
-      if (letter === " ") {
-        formattedLocation += "+";
-      } else {
-        formattedLocation += letter;
-      }
-    }
-    const url = `https://jobs.github.com/positions.json?description=${formattedJobs}&location=${formattedLocation}`;
+    const url = `https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
     axios.get(url)
       .then(response => {
         setData(response.data);
