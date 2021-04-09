@@ -1,10 +1,11 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import { Tab } from "../App";
 import { NavigationContainer } from "@react-navigation/native";
 import { RejectedJobs } from "./RejectedJobs";
 import { SavedJobs } from "./SavedJobs";
 import { SearchForJobs } from "./SearchForJobs";
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons } from "@expo/vector-icons";
 
 export const ParentContainer = () => {
   return (
@@ -15,17 +16,11 @@ export const ParentContainer = () => {
             let iconName;
 
             if (route.name === "Search Jobs") {
-              iconName = focused
-                ? "search"
-                : "search-outline";
+              iconName = focused ? "search" : "search-outline";
             } else if (route.name === "Saved Jobs") {
-              iconName = focused 
-                ? "bookmark" 
-                : "bookmark-outline";
+              iconName = focused ? "bookmark" : "bookmark-outline";
             } else if (route.name === "Rejected Jobs") {
-              iconName = focused
-                ? "trash-bin"
-                : "trash-bin-outline";
+              iconName = focused ? "trash-bin" : "trash-bin-outline";
             }
 
             // You can return any component that you like here!
