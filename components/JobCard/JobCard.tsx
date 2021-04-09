@@ -2,11 +2,13 @@ import React from "react";
 import { View, Text, Image, useWindowDimensions } from "react-native";
 import HTML from "react-native-render-html";
 import { styles } from "./styles";
-import { jobs } from "../../mock-data";
+import { Job } from "../Job";
 
-let job = jobs[2]; // mock data for now
+type JobCardProps = {
+  job: Job;
+};
 
-export const JobCard = () => {
+export const JobCard = ({ job }: JobCardProps) => {
   const contentWidth = useWindowDimensions().width;
   return (
     <View style={styles.container}>
