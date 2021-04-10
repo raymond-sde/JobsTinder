@@ -23,9 +23,9 @@ export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
         cardIndex={index}
         renderCard={(job) => <JobCard job={job} />}
         onSwiped={onSwiped}
-        stackSize={jobs.length} // how many items
-        stackScale={10} // how much to shrink in percentage
-        stackSeparation={14} // spacing between each item
+        // stackSize={jobs.length} // how many items
+        // stackScale={10} // how much to shrink in percentage
+        // stackSeparation={14} // spacing between each item
         disableTopSwipe
         disableBottomSwipe
         animateOverlayLabelsOpacity
