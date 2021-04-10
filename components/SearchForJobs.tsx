@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   TextInput,
@@ -65,8 +65,12 @@ export const SearchForJobs = () => {
       case ViewState.SUCCESS:
         return (
           <View>
-            <SwipeForJobs jobs={data} />
-            {renderBack()}
+            {data.length && (
+              <View>
+                <SwipeForJobs jobs={data} />
+                {renderBack()}
+              </View>
+            )}
           </View>
         );
       default:
