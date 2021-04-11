@@ -16,8 +16,8 @@ export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
     setIndex((index + 1) % jobs.length);
   };
 
-  const saveOrRejectCurrentJob = (key: string, index: number) => {
-    AsyncStorage.getItem(key, (err, result) => {
+  const saveOrRejectCurrentJob = async (key: string, index: number): void => {
+    await AsyncStorage.getItem(key, async (err, result) => {
       let obj = {};
       if (result !== null) {
         console.log("Data Found");
@@ -26,7 +26,7 @@ export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
         console.log("Data Not Found");
       }
       obj[jobs[index].id] = jobs[index];
-      AsyncStorage.setItem(key, JSON.stringify(obj));
+      await AsyncStorage.setItem(key, JSON.stringify(obj));
     });
   };
 
