@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { Job } from "./Job";
 import { SwipeForJobs } from "./SwipeForJobs/SwipeForJobs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 enum ViewState {
   LOADING,
@@ -22,6 +23,24 @@ export const SearchForJobs = () => {
   const [location, onChangeLocation] = useState<string>("");
   const [data, setData] = useState<Job[]>([]);
   const [viewState, setViewState] = useState<ViewState | null>(null);
+
+  const logCurrentStorage = async () => {
+    await AsyncStorage.getAllKeys().then((keyArray) => {
+      AsyncStorage.multiGet(keyArray).then((keyValArray) => {
+        let myStorage: any = {};
+        for (let keyVal of keyValArray) {
+          myStorage[keyVal[0]] = keyVal[1];
+        }
+        console.log("CURRENT STORAGE: ", myStorage);
+      });
+    });
+  };
+
+  const clearCurrentStorage = async () => {
+    await AsyncStorage.clear().then(() => {
+      console.log("Storage Cleared");
+    })
+  }
 
   const handleSearch = (): void => {
     setViewState(ViewState.LOADING);
@@ -95,7 +114,6 @@ export const SearchForJobs = () => {
         );
     }
   };
-
   return <View>{renderJobsView()}</View>;
 };
 

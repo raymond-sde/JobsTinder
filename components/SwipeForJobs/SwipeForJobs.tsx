@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { JobCard } from "../JobCard/JobCard";
 import { styles, overlayLabels } from "./styles";
 import { Job } from "../Job";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type SwipeForJobsProps = {
   jobs: Job[];
@@ -11,9 +12,22 @@ type SwipeForJobsProps = {
 
 export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
   const [index, setIndex] = React.useState<number>(0);
-
   const onSwiped = (): void => {
     setIndex((index + 1) % jobs.length);
+  };
+
+  const saveOrRejectCurrentJob = async (key: string, index: number): void => {
+    await AsyncStorage.getItem(key, async (err, result) => {
+      let obj = {};
+      if (result !== null) {
+        console.log("Data Found");
+        obj = JSON.parse(result);
+      } else {
+        console.log("Data Not Found");
+      }
+      obj[jobs[index].id] = jobs[index];
+      await AsyncStorage.setItem(key, JSON.stringify(obj));
+    });
   };
 
   return (
@@ -23,6 +37,12 @@ export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
         cardIndex={index}
         renderCard={(job) => <JobCard job={job} />}
         onSwiped={onSwiped}
+        onSwipedRight={() => saveOrRejectCurrentJob("savedJobs", index)}
+        onSwipedLeft={() => {
+          saveOrRejectCurrentJob("rejectedJobs", index);
+          // AsyncStorage.clear(); 
+          // use AsyncStorage.clear() to clear storage. 
+        }}
         // stackSize={jobs.length} // how many items
         // stackScale={10} // how much to shrink in percentage
         // stackSeparation={14} // spacing between each item
