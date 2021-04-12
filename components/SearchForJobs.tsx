@@ -25,7 +25,7 @@ export const SearchForJobs = () => {
 
   const handleSearch = (): void => {
     setViewState(ViewState.LOADING);
-    const url = `https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
+    const url = `https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
     axios
       .get(url)
       .then((response) => {
