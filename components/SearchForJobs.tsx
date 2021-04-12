@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   TextInput,
@@ -11,11 +11,18 @@ import { Job } from "./Job";
 import { SwipeForJobs } from "./SwipeForJobs/SwipeForJobs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+enum ViewState {
+  LOADING,
+  ERROR,
+  NO_DATA,
+  SUCCESS,
+}
+
 export const SearchForJobs = () => {
   const [jobs, onChangeJobs] = useState<string>("");
   const [location, onChangeLocation] = useState<string>("");
   const [data, setData] = useState<Job[]>([]);
-  const [isSubmitted, onChangeSubmit] = useState<boolean>(false);
+  const [viewState, setViewState] = useState<ViewState | null>(null);
 
   const logCurrentStorage = async () => {
     await AsyncStorage.getAllKeys().then((keyArray) => {
@@ -36,58 +43,78 @@ export const SearchForJobs = () => {
   }
 
   const handleSearch = (): void => {
-    const url = `https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
+    setViewState(ViewState.LOADING);
+    const url = `https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
     axios
       .get(url)
       .then((response) => {
+        !response.data.length
+          ? setViewState(ViewState.NO_DATA)
+          : setViewState(ViewState.SUCCESS);
+
         setData(response.data);
-        onChangeSubmit(true);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setViewState(ViewState.ERROR);
+        console.log(error);
+      });
   };
 
   const handleBack = (): void => {
-    onChangeSubmit(false);
+    setViewState(null);
   };
 
-  return (
-    <View>
-      {isSubmitted ? (
-        <View>
-          <SwipeForJobs jobs={data} />
-          <Button onPress={handleBack} title="Back To Search" color="#841584" />
-        </View>
-      ) : (
-        <SafeAreaView>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeJobs}
-            value={jobs}
-            placeholder="Search Jobs"
-          />
-          <TextInput />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeLocation}
-            value={location}
-            placeholder="Location"
-          />
-          <TextInput />
-          <Button onPress={handleSearch} title="Search" color="#841584" />
-          <Button
-            onPress={() => clearCurrentStorage()}
-            title="Clear All Storage (TEST ONLY)"
-            color="black"
-          />
-          <Button
-            onPress={() => logCurrentStorage()}
-            title="Log All Storage (TEST ONLY)"
-            color="gray"
-          />
-        </SafeAreaView>
-      )}
-    </View>
-  );
+  const renderBack = (message?: string): React.ReactElement => {
+    return (
+      <View>
+        <Button onPress={handleBack} title="Back To Search" color="#841584" />
+        {message ? <p>{message}</p> : null}
+      </View>
+    );
+  };
+
+  const renderJobsView = (): React.ReactElement => {
+    switch (viewState) {
+      case ViewState.LOADING:
+        return <p>Loading...</p>;
+      case ViewState.ERROR:
+        return renderBack("Something went wrong.");
+      case ViewState.NO_DATA:
+        return renderBack("No jobs found. Blame Covid.");
+      case ViewState.SUCCESS:
+        return (
+          <View>
+            {data.length && (
+              <View>
+                <SwipeForJobs jobs={data} />
+                {renderBack()}
+              </View>
+            )}
+          </View>
+        );
+      default:
+        return (
+          <SafeAreaView>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeJobs}
+              value={jobs}
+              placeholder="Search Jobs"
+            />
+            <TextInput />
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeLocation}
+              value={location}
+              placeholder="Location"
+            />
+            <TextInput />
+            <Button onPress={handleSearch} title="Search" color="#841584" />
+          </SafeAreaView>
+        );
+    }
+  };
+  return <View>{renderJobsView()}</View>;
 };
 
 const styles = StyleSheet.create({
