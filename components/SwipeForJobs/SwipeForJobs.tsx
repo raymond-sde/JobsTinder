@@ -43,9 +43,9 @@ export const SwipeForJobs = ({ jobs }: SwipeForJobsProps) => {
           // AsyncStorage.clear(); 
           // use AsyncStorage.clear() to clear storage. 
         }}
-        stackSize={jobs.length} // how many items
-        stackScale={10} // how much to shrink in percentage
-        stackSeparation={14} // spacing between each item
+        // stackSize={jobs.length} // how many items
+        // stackScale={10} // how much to shrink in percentage
+        // stackSeparation={14} // spacing between each item
         disableTopSwipe
         disableBottomSwipe
         animateOverlayLabelsOpacity
