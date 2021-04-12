@@ -5,6 +5,7 @@ import {
   Button,
   StyleSheet,
   View,
+  Text,
 } from "react-native";
 import axios from "axios";
 import { Job } from "./Job";
@@ -53,9 +54,13 @@ export const SearchForJobs = () => {
           : setViewState(ViewState.SUCCESS);
 
         setData(response.data);
+        onChangeJobs("");
+        onChangeLocation("");
       })
       .catch((error) => {
         setViewState(ViewState.ERROR);
+        onChangeJobs("");
+        onChangeLocation("");
         console.log(error);
       });
   };
@@ -68,7 +73,7 @@ export const SearchForJobs = () => {
     return (
       <View>
         <Button onPress={handleBack} title="Back To Search" color="#841584" />
-        {message ? <p>{message}</p> : null}
+        {message ? <Text>{message}</Text> : null}
       </View>
     );
   };
@@ -76,7 +81,7 @@ export const SearchForJobs = () => {
   const renderJobsView = (): React.ReactElement => {
     switch (viewState) {
       case ViewState.LOADING:
-        return <p>Loading...</p>;
+        return renderBack("Loading...");
       case ViewState.ERROR:
         return renderBack("Something went wrong.");
       case ViewState.NO_DATA:
@@ -94,21 +99,19 @@ export const SearchForJobs = () => {
         );
       default:
         return (
-          <SafeAreaView>
+          <SafeAreaView style={styles.searchStyling}>
             <TextInput
               style={styles.input}
               onChangeText={onChangeJobs}
               value={jobs}
               placeholder="Search Jobs"
             />
-            <TextInput />
             <TextInput
               style={styles.input}
               onChangeText={onChangeLocation}
               value={location}
               placeholder="Location"
             />
-            <TextInput />
             <Button onPress={handleSearch} title="Search" color="#841584" />
           </SafeAreaView>
         );
@@ -122,5 +125,10 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 1,
+    paddingLeft: 10,
   },
+  searchStyling: {
+    backgroundColor: "bisque",
+    justifyContent: "center",
+  }
 });
