@@ -40,12 +40,12 @@ export const SearchForJobs = () => {
   const clearCurrentStorage = async () => {
     await AsyncStorage.clear().then(() => {
       console.log("Storage Cleared");
-    })
-  }
+    });
+  };
 
   const handleSearch = (): void => {
     setViewState(ViewState.LOADING);
-    const url = `https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
+    const url = `https://jobs.github.com/positions.json?description=${jobs}&location=${location}`;
     axios
       .get(url)
       .then((response) => {
@@ -69,7 +69,7 @@ export const SearchForJobs = () => {
     setViewState(null);
   };
 
-  const renderBack = (message?: string): React.ReactElement => {
+  const renderBack = (message?: string): JSX.Element => {
     return (
       <View>
         <Button onPress={handleBack} title="Back To Search" color="#841584" />
@@ -78,10 +78,10 @@ export const SearchForJobs = () => {
     );
   };
 
-  const renderJobsView = (): React.ReactElement => {
+  const renderJobsView = (): JSX.Element => {
     switch (viewState) {
       case ViewState.LOADING:
-        return renderBack("Loading...");
+        return <Text>Loading...</Text>;
       case ViewState.ERROR:
         return renderBack("Something went wrong.");
       case ViewState.NO_DATA:
@@ -89,12 +89,12 @@ export const SearchForJobs = () => {
       case ViewState.SUCCESS:
         return (
           <View>
-            {data.length && (
+            {data.length ? (
               <View>
                 <SwipeForJobs jobs={data} />
                 {renderBack()}
               </View>
-            )}
+            ) : null}
           </View>
         );
       default:
