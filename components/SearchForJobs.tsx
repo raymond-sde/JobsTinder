@@ -27,18 +27,6 @@ export const SearchForJobs = () => {
   const [data, setData] = useState<Job[]>([]);
   const [viewState, setViewState] = useState<ViewState | null>(null);
 
-  const logCurrentStorage = async () => {
-    await AsyncStorage.getAllKeys().then((keyArray) => {
-      AsyncStorage.multiGet(keyArray).then((keyValArray) => {
-        let myStorage: any = {};
-        for (let keyVal of keyValArray) {
-          myStorage[keyVal[0]] = keyVal[1];
-        }
-        console.log("CURRENT STORAGE: ", myStorage);
-      });
-    });
-  };
-
   const clearCurrentStorage = async () => {
     await AsyncStorage.clear().then(() => {
       console.log("Storage Cleared");
@@ -51,11 +39,12 @@ export const SearchForJobs = () => {
     axios
       .get(url)
       .then((response) => {
+        setData(response.data);
+
         !response.data.length
           ? setViewState(ViewState.NO_DATA)
           : setViewState(ViewState.SUCCESS);
 
-        setData(response.data);
         onChangeJobs("");
         onChangeLocation("");
       })
@@ -119,7 +108,16 @@ export const SearchForJobs = () => {
         );
     }
   };
-  return <View>{renderJobsView()}</View>;
+  return (
+    <View>
+      {renderJobsView()}
+      <Button
+        onPress={clearCurrentStorage}
+        title="Clear Storage"
+        color="#841584"
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

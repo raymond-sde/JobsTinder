@@ -2,13 +2,13 @@ import "react-native-gesture-handler";
 import * as React from "react";
 import { Tab } from "../App";
 import { NavigationContainer } from "@react-navigation/native";
-import { RejectedJobs } from "./RejectedJobs";
-import { SavedJobs } from "./SavedJobs";
+import { SavedOrRejectedJobs } from "./SavedOrRejectedJobs";
 import { SearchForJobs } from "./SearchForJobs";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import { JobStatus } from "./JobStatus";
 const SearchStack = createStackNavigator();
 
 const SearchStackScreen = () => (
@@ -44,8 +44,16 @@ export const ParentContainer = () => {
           }}
         >
           <Tab.Screen name="Search Jobs" component={SearchStackScreen} />
-          <Tab.Screen name="Saved Jobs" component={SavedJobs} />
-          <Tab.Screen name="Rejected Jobs" component={RejectedJobs} />
+          <Tab.Screen
+            name="Saved Jobs"
+            children={() => <SavedOrRejectedJobs jobStatus={JobStatus.SAVED} />}
+          />
+          <Tab.Screen
+            name="Rejected Jobs"
+            children={() => (
+              <SavedOrRejectedJobs jobStatus={JobStatus.REJECTED} />
+            )}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </View>
