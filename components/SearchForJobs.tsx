@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   TextInput,
-  Button,
   StyleSheet,
   View,
   Text,
@@ -11,6 +10,9 @@ import axios from "axios";
 import { Job } from "./Job";
 import { SwipeForJobs } from "./SwipeForJobs/SwipeForJobs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from 'react-native-elements';
+import { NavigationContainer } from "@react-navigation/native";
+import { ScreenContainer } from "react-native-screens";
 
 enum ViewState {
   LOADING,
@@ -72,7 +74,7 @@ export const SearchForJobs = () => {
   const renderBack = (message?: string): JSX.Element => {
     return (
       <View>
-        <Button onPress={handleBack} title="Back To Search" color="#841584" />
+        <Button onPress={handleBack} title="Back To Search" buttonStyle={styles.button} />
         {message ? <Text>{message}</Text> : null}
       </View>
     );
@@ -99,7 +101,7 @@ export const SearchForJobs = () => {
         );
       default:
         return (
-          <SafeAreaView style={styles.searchStyling}>
+          <ScreenContainer style={styles.searchStyling}>
             <TextInput
               style={styles.input}
               onChangeText={onChangeJobs}
@@ -112,8 +114,8 @@ export const SearchForJobs = () => {
               value={location}
               placeholder="Location"
             />
-            <Button onPress={handleSearch} title="Search" color="#841584" />
-          </SafeAreaView>
+            <Button onPress={handleSearch} title="Search" buttonStyle={styles.button} />
+          </ScreenContainer>
         );
     }
   };
@@ -121,14 +123,21 @@ export const SearchForJobs = () => {
 };
 
 const styles = StyleSheet.create({
+  searchStyling: {
+    width: "100%",
+    paddingLeft: "20%",
+    paddingRight: "20%",
+    marginTop: 32,
+  },
   input: {
     height: 40,
     margin: 12,
     borderWidth: 1,
     paddingLeft: 10,
   },
-  searchStyling: {
-    backgroundColor: "bisque",
-    justifyContent: "center",
+  button: {
+    backgroundColor: "#841584",
+    borderRadius: 15,
+    width: "100%",
   }
 });
