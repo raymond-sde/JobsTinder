@@ -6,6 +6,7 @@ import { SavedOrRejectedJobs } from "./SavedOrRejectedJobs";
 import { SearchForJobs } from "./SearchForJobs";
 import { Ionicons } from "@expo/vector-icons";
 import { JobStatus } from "./JobStatus";
+import { TestWebView } from "./TestWebView";
 
 export const ParentContainer = () => {
   return (
@@ -41,6 +42,12 @@ export const ParentContainer = () => {
           name="Rejected Jobs"
           children={() => (
             <SavedOrRejectedJobs jobStatus={JobStatus.REJECTED} />
+          )}
+        />
+        <Tab.Screen
+          name="Test WebView"
+          children={() => (
+            <TestWebView />
           )}
         />
       </Tab.Navigator>
