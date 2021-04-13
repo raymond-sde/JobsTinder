@@ -7,6 +7,7 @@ import { Job } from "../Job";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageJob } from "../StorageJob";
 import { JobStatus } from "../JobStatus";
+import { Message } from '../Message';
 
 type SwipeForJobsProps = {
   jobs: Job[];
@@ -124,6 +125,6 @@ export const SwipeForJobs = (props: SwipeForJobsProps) => {
       ></Swiper>
     </View>
   ) : (
-    <Text>No more jobs</Text>
+    <Message message="No more jobs" />
   );
 };

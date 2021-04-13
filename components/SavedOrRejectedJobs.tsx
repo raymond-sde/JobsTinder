@@ -10,6 +10,7 @@ import {
 import { useRetrieveSavedOrRejectedJobs } from "../hooks/useStorageJobs";
 import { JobStatus } from "./JobStatus";
 import { StorageJob } from "./StorageJob";
+import { Message } from "./Message";
 
 const Item = ({ title }: { title: string }) => (
   <View style={styles.item}>
@@ -39,7 +40,7 @@ export const SavedOrRejectedJobs = (props: SavedOrRejectedJobsProps) => {
       />
     </SafeAreaView>
   ) : (
-    <Text>Nothing Saved Yet</Text>
+    <Message message="Nothing Saved Yet" />
   );
 };
 
