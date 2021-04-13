@@ -109,12 +109,12 @@ export const SearchForJobs = () => {
     }
   };
   return (
-    <View>
+    <View style={styles.clearButtonContainer}>
       {renderJobsView()}
       <Button
         onPress={clearCurrentStorage}
         title="Clear Storage"
-        color="#841584"
+        buttonStyle={styles.clearButton}
       />
     </View>
   );
@@ -137,5 +137,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#841584",
     borderRadius: 15,
     width: "100%",
+  },
+  clearButtonContainer: {
+    backgroundColor: "gold"
+  },
+  clearButton: {
+    backgroundColor: "#841584",
+    borderRadius: 15,
+    marginTop: 20,
+    paddingLeft: "20%",
+    paddingRight: "20%"
   }
 });
