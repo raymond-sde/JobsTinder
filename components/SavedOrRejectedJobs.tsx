@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { Linking } from "react-native";
 import {
   SafeAreaView,
   View,
@@ -6,41 +7,59 @@ import {
   StyleSheet,
   Text,
   StatusBar,
+  Button,
 } from "react-native";
+
 import { useRenderedJobsData } from "../hooks/useStorageJobs";
 import { JobStatus } from "./JobStatus";
 import { useIsFocused } from "@react-navigation/native";
-
-const Item = ({ title }: { title: string }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
+import { TestWebView } from "./TestWebView";
+import { Job } from "./Job";
 
 type SavedOrRejectedJobsProps = {
   jobStatus: JobStatus;
 };
 
 export const SavedOrRejectedJobs = (props: SavedOrRejectedJobsProps) => {
+  const [url, setUrl] = useState<string>("");
   const { jobStatus } = props;
   const isFocused = useIsFocused();
   const { storageJob } = useRenderedJobsData([], jobStatus, isFocused, true);
   const storageJobsKeys = Object.keys(storageJob);
 
-  const renderItem = ({ item }: { item: string }): JSX.Element => (
-    <Item title={storageJob[item].title} />
+  const Item = ({ item }: { item: Job }): JSX.Element => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Button onPress={() => setUrl(item.url)} title="Apply" color="#841584" />
+    </View>
   );
 
-  return storageJobsKeys.length ? (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={storageJobsKeys}
-        renderItem={renderItem}
-        keyExtractor={(item) => storageJob[item].id}
-      />
-    </SafeAreaView>
+  const renderItem = ({ item }: { item: string }): JSX.Element => (
+    <Item item={storageJob[item]} />
+  );
+
+  const renderFlatList = (): JSX.Element => {
+    return storageJobsKeys.length ? (
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={storageJobsKeys}
+          renderItem={renderItem}
+          keyExtractor={(item) => storageJob[item].id}
+        />
+      </SafeAreaView>
+    ) : (
+      <Text>Nothing Saved Yet</Text>
+    );
+  };
+
+  const handleOnPress = (): void => {
+    setUrl("");
+  };
+
+  return url === "" ? (
+    renderFlatList()
   ) : (
-    <Text>Nothing Saved Yet</Text>
+    <TestWebView onPress={handleOnPress} url={url} />
   );
 };
 
@@ -55,7 +74,17 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
+  button: {
+    margin: 10,
+    backgroundColor: "#356bca",
+    borderRadius: 5,
+    padding: 10,
+  },
   title: {
     fontSize: 32,
+  },
+  text: {
+    color: "#fff",
+    textAlign: "center",
   },
 });
