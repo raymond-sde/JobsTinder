@@ -8,9 +8,10 @@ type JobCardProps = {
   job: Job;
 };
 
-export const JobCard = ({ job }: JobCardProps) => {
+export const JobCard = (props: JobCardProps): JSX.Element => {
+  const { job } = props;
   const contentWidth = useWindowDimensions().width;
-  return (
+  return job ? (
     <View style={styles.container}>
       <Image style={styles.logo} source={{ uri: job.company_logo }}></Image>
       <Text>Job Title: {job.title}</Text>
@@ -20,5 +21,7 @@ export const JobCard = ({ job }: JobCardProps) => {
       <Text>Date Created: {new Date(job.created_at).toLocaleDateString()}</Text>
       <HTML source={{ html: job.how_to_apply }} contentWidth={contentWidth} />
     </View>
+  ) : (
+    <Text>No Job Card</Text>
   );
 };
