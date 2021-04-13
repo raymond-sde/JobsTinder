@@ -7,9 +7,9 @@ import {
   Text,
   StatusBar,
 } from "react-native";
-import { useRetrieveSavedOrRejectedJobs } from "../hooks/useStorageJobs";
+import { useRenderedJobsData } from "../hooks/useStorageJobs";
 import { JobStatus } from "./JobStatus";
-import { StorageJob } from "./StorageJob";
+import { useIsFocused } from "@react-navigation/native";
 
 const Item = ({ title }: { title: string }) => (
   <View style={styles.item}>
@@ -23,11 +23,12 @@ type SavedOrRejectedJobsProps = {
 
 export const SavedOrRejectedJobs = (props: SavedOrRejectedJobsProps) => {
   const { jobStatus } = props;
-  const data: StorageJob = useRetrieveSavedOrRejectedJobs(jobStatus);
-  const storageJobsKeys = Object.keys(data);
+  const isFocused = useIsFocused();
+  const { storageJob } = useRenderedJobsData([], jobStatus, isFocused, true);
+  const storageJobsKeys = Object.keys(storageJob);
 
   const renderItem = ({ item }: { item: string }): JSX.Element => (
-    <Item title={data[item].title} />
+    <Item title={storageJob[item].title} />
   );
 
   return storageJobsKeys.length ? (
@@ -35,7 +36,7 @@ export const SavedOrRejectedJobs = (props: SavedOrRejectedJobsProps) => {
       <FlatList
         data={storageJobsKeys}
         renderItem={renderItem}
-        keyExtractor={(item) => data[item].id}
+        keyExtractor={(item) => storageJob[item].id}
       />
     </SafeAreaView>
   ) : (
