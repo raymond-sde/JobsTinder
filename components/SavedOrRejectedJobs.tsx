@@ -15,6 +15,7 @@ import { JobStatus } from "./JobStatus";
 import { useIsFocused } from "@react-navigation/native";
 import { TestWebView } from "./TestWebView";
 import { Job } from "./Job";
+import { Message } from "./Message";
 
 type SavedOrRejectedJobsProps = {
   jobStatus: JobStatus;
@@ -48,7 +49,7 @@ export const SavedOrRejectedJobs = (props: SavedOrRejectedJobsProps) => {
         />
       </SafeAreaView>
     ) : (
-      <Text>Nothing Saved Yet</Text>
+      <Message message="Nothing Saved Yet" />
     );
   };
 

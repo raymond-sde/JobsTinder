@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   TextInput,
-  Button,
   StyleSheet,
   View,
   Text,
@@ -11,6 +10,10 @@ import axios from "axios";
 import { Job } from "./Job";
 import { SwipeForJobs } from "./SwipeForJobs/SwipeForJobs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from 'react-native-elements';
+import { NavigationContainer } from "@react-navigation/native";
+import { ScreenContainer } from "react-native-screens";
+import { Message } from "./Message";
 
 enum ViewState {
   LOADING,
@@ -42,9 +45,14 @@ export const SearchForJobs = () => {
         !response.data.length
           ? setViewState(ViewState.NO_DATA)
           : setViewState(ViewState.SUCCESS);
+
+        onChangeJobs("");
+        onChangeLocation("");
       })
       .catch((error) => {
         setViewState(ViewState.ERROR);
+        onChangeJobs("");
+        onChangeLocation("");
         console.log(error);
       });
   };
@@ -55,9 +63,9 @@ export const SearchForJobs = () => {
 
   const renderBack = (message?: string): JSX.Element => {
     return (
-      <View>
-        <Button onPress={handleBack} title="Back To Search" color="#841584" />
-        {message ? <Text>{message}</Text> : null}
+      <View style={styles.buttonContainer}>
+        {message ? <Message message={message} /> : null}
+        <Button onPress={handleBack} title="Back To Search" buttonStyle={styles.backButton} />
       </View>
     );
   };
@@ -65,7 +73,7 @@ export const SearchForJobs = () => {
   const renderJobsView = (): JSX.Element => {
     switch (viewState) {
       case ViewState.LOADING:
-        return <Text>Loading...</Text>;
+        return <Message message="Loading..." />;
       case ViewState.ERROR:
         return renderBack("Something went wrong.");
       case ViewState.NO_DATA:
@@ -75,15 +83,19 @@ export const SearchForJobs = () => {
           <View>
             {data.length ? (
               <View>
-                <SwipeForJobs jobs={data} />
-                {renderBack()}
+                <View>
+                  <SwipeForJobs jobs={data} />
+                </View>
+                <View>
+                  {renderBack()}
+                </View>
               </View>
             ) : null}
           </View>
         );
       default:
         return (
-          <SafeAreaView>
+          <ScreenContainer style={styles.searchStyling}>
             <TextInput
               style={styles.input}
               onChangeText={onChangeJobs}
@@ -96,27 +108,61 @@ export const SearchForJobs = () => {
               value={location}
               placeholder="Location"
             />
-            <Button onPress={handleSearch} title="Search" color="#841584" />
-          </SafeAreaView>
+            <Button onPress={handleSearch} title="Search" buttonStyle={styles.searchButton} />
+          </ScreenContainer>
         );
     }
   };
   return (
-    <View>
-      {renderJobsView()}
-      <Button
-        onPress={clearCurrentStorage}
-        title="Clear Storage"
-        color="#841584"
-      />
+    <View style={styles.container}>
+      <View>
+        {renderJobsView()}
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={clearCurrentStorage}
+          title="Clear Storage"
+          buttonStyle={styles.clearButton}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "gold",
+  },
+  searchStyling: {
+    width: "100%",
+    paddingLeft: "20%",
+    paddingRight: "20%",
+  },
   input: {
     height: 40,
     margin: 12,
     borderWidth: 1,
+    paddingLeft: 10,
+  },
+  searchButton: {
+    backgroundColor: "#841584",
+    borderRadius: 15,
+    width: "100%",
+  },
+  buttonContainer: {
+    paddingLeft: "20%",
+    paddingRight: "20%",
+  },
+  clearButton: {
+    backgroundColor: "#841584",
+    borderRadius: 15,
+    marginTop: 20,
+  },
+  backButton: {
+    backgroundColor: "#841584",
+    borderRadius: 15,
+    marginTop: 20,
   },
 });

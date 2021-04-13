@@ -5,45 +5,57 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SavedOrRejectedJobs } from "./SavedOrRejectedJobs";
 import { SearchForJobs } from "./SearchForJobs";
 import { Ionicons } from "@expo/vector-icons";
+import { View } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import { JobStatus } from "./JobStatus";
+const SearchStack = createStackNavigator();
+
+const SearchStackScreen = () => (
+  <SearchStack.Navigator>
+    <SearchStack.Screen name="Search For Job" component={SearchForJobs} />
+  </SearchStack.Navigator>
+);
 
 export const ParentContainer = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <View style={{ flex: 1, justifyContent: "center" }}>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === "Search Jobs") {
-              iconName = focused ? "search" : "search-outline";
-            } else if (route.name === "Saved Jobs") {
-              iconName = focused ? "bookmark" : "bookmark-outline";
-            } else if (route.name === "Rejected Jobs") {
-              iconName = focused ? "trash-bin" : "trash-bin-outline";
-            }
+              if (route.name === "Search Jobs") {
+                iconName = focused ? "search" : "search-outline";
+              } else if (route.name === "Saved Jobs") {
+                iconName = focused ? "bookmark" : "bookmark-outline";
+              } else if (route.name === "Rejected Jobs") {
+                iconName = focused ? "trash-bin" : "trash-bin-outline";
+              }
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: "tomato",
-          inactiveTintColor: "gray",
-        }}
-      >
-        <Tab.Screen name="Search Jobs" component={SearchForJobs} />
-        <Tab.Screen
-          name="Saved Jobs"
-          children={() => <SavedOrRejectedJobs jobStatus={JobStatus.SAVED} />}
-        />
-        <Tab.Screen
-          name="Rejected Jobs"
-          children={() => (
-            <SavedOrRejectedJobs jobStatus={JobStatus.REJECTED} />
-          )}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: "tomato",
+            inactiveTintColor: "gray",
+          }}
+        >
+          <Tab.Screen name="Search Jobs" component={SearchStackScreen} />
+          <Tab.Screen
+            name="Saved Jobs"
+            children={() => <SavedOrRejectedJobs jobStatus={JobStatus.SAVED} />}
+          />
+          <Tab.Screen
+            name="Rejected Jobs"
+            children={() => (
+              <SavedOrRejectedJobs jobStatus={JobStatus.REJECTED} />
+            )}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 0.45,
+    // flex: 0.45,
     borderRadius: 8,
     shadowRadius: 25,
     shadowColor: "#000",

@@ -6,6 +6,7 @@ import { styles, overlayLabels } from "./styles";
 import { Job } from "../Job";
 import { JobStatus } from "../JobStatus";
 import { useRenderedJobsData } from "../../hooks/useStorageJobs";
+import { Message } from "../Message";
 
 type SwipeForJobsProps = {
   jobs: Job[];
@@ -44,6 +45,6 @@ export const SwipeForJobs = (props: SwipeForJobsProps) => {
       ></Swiper>
     </View>
   ) : (
-    <Text>No more jobs</Text>
+    <Message message="No more jobs" />
   );
 };
