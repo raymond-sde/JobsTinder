@@ -3,6 +3,7 @@ import { View, Text, Image, useWindowDimensions } from "react-native";
 import HTML from "react-native-render-html";
 import { styles } from "./styles";
 import { Job } from "../Job";
+import { Message } from '../Message';
 
 type JobCardProps = {
   job: Job;
@@ -22,6 +23,6 @@ export const JobCard = (props: JobCardProps): JSX.Element => {
       <HTML source={{ html: job.how_to_apply }} contentWidth={contentWidth} />
     </View>
   ) : (
-    <Text>No Job Card</Text>
+    <Message message="No jobs on this location!" />
   );
 };
