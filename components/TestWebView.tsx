@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
 import { WebView } from "react-native-webview";
 
 type TestWebViewProps = {
@@ -15,12 +16,12 @@ export const TestWebView = (props: TestWebViewProps): JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <WebView source={{ uri: url }} style={{ marginTop: 20 }} />
       <Button
         onPress={() => handleOnPress()}
         title="Return to Jobs"
-        color="#841584"
+        buttonStyle={styles.returnButton}
       />
-      <WebView source={{ uri: url }} style={{ marginTop: 20 }} />
     </View>
   );
 };
@@ -29,8 +30,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    paddingTop: 20,
     backgroundColor: "#ecf0f1",
-    padding: 8,
+  },
+  returnButton: {
+    backgroundColor: "#841584",
+    borderRadius: 0,
+    width: "100%",
   },
 });

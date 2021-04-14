@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, StyleSheet, View, Text, Platform } from "react-native";
+import { TextInput, View, Text, Platform } from "react-native";
 import axios from "axios";
 import { Job } from "../Job";
 import { SwipeForJobs } from "../SwipeForJobs/SwipeForJobs";
