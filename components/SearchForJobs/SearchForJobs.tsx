@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  TextInput,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import React, { useState } from "react";
+import { TextInput, StyleSheet, View, Text, Platform } from "react-native";
 import axios from "axios";
-import { Job } from "./Job";
-import { SwipeForJobs } from "./SwipeForJobs/SwipeForJobs";
+import { Job } from "../Job";
+import { SwipeForJobs } from "../SwipeForJobs/SwipeForJobs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button } from 'react-native-elements';
-import { NavigationContainer } from "@react-navigation/native";
+import { Button } from "react-native-elements";
 import { ScreenContainer } from "react-native-screens";
-import { Message } from "./Message";
+import { Message } from "../Message";
+import { styles } from "./styles";
 
 enum ViewState {
   LOADING,
@@ -27,11 +21,38 @@ export const SearchForJobs = () => {
   const [location, onChangeLocation] = useState<string>("");
   const [data, setData] = useState<Job[]>([]);
   const [viewState, setViewState] = useState<ViewState | null>(null);
+  const [clearBtnText, setClearBtnText] = useState<string>("Clear Storage");
+
+  const renderStorageSuccessOrFail = (success: boolean): void => {
+    if (success) {
+      setClearBtnText("Storage Cleared!");
+      setTimeout(() => {
+        setClearBtnText("Clear Storage");
+      }, 1500);
+      console.log("Storage Cleared!");
+    } else {
+      setClearBtnText("Clear Failed!");
+      setTimeout(() => {
+        setClearBtnText("Clear Storage");
+      }, 1500);
+    }
+  };
 
   const clearCurrentStorage = async () => {
-    await AsyncStorage.clear().then(() => {
-      console.log("Storage Cleared");
-    });
+    const asyncStorageKeys = await AsyncStorage.getAllKeys();
+    try {
+      if (Platform.OS === "android" || Platform.OS === "web") {
+        await AsyncStorage.clear();
+        renderStorageSuccessOrFail(true);
+      }
+      if (Platform.OS === "ios") {
+        await AsyncStorage.multiRemove(asyncStorageKeys);
+        renderStorageSuccessOrFail(true);
+      }
+    } catch (error) {
+      renderStorageSuccessOrFail(false);
+      console.log(error);
+    }
   };
 
   const handleSearch = (): void => {
@@ -63,9 +84,13 @@ export const SearchForJobs = () => {
 
   const renderBack = (message?: string): JSX.Element => {
     return (
-      <View style={styles.buttonContainer}>
+      <View style={styles.bottomContainer}>
         {message ? <Message message={message} /> : null}
-        <Button onPress={handleBack} title="Back To Search" buttonStyle={styles.backButton} />
+        <Button
+          onPress={handleBack}
+          title="Back To Search"
+          buttonStyle={styles.backButton}
+        />
       </View>
     );
   };
@@ -79,23 +104,23 @@ export const SearchForJobs = () => {
       case ViewState.NO_DATA:
         return renderBack("No jobs found. Blame Covid.");
       case ViewState.SUCCESS:
-        return (
-          <View>
-            {data.length ? (
-              <View>
-                <View>
-                  <SwipeForJobs jobs={data} />
-                </View>
-                <View>
-                  {renderBack()}
-                </View>
-              </View>
-            ) : null}
+        return data.length ? (
+          <View style={styles.swiperContainer}>
+            <View style={styles.topContainer}>
+              <Text style={styles.header}>Jobs Tinder</Text>
+            </View>
+            <SwipeForJobs jobs={data} />
+            {renderBack()}
           </View>
+        ) : (
+          <></>
         );
       default:
         return (
           <ScreenContainer style={styles.searchStyling}>
+            <View style={styles.topContainer}>
+              <Text style={styles.header}>Jobs Tinder</Text>
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={onChangeJobs}
@@ -108,61 +133,19 @@ export const SearchForJobs = () => {
               value={location}
               placeholder="Location"
             />
-            <Button onPress={handleSearch} title="Search" buttonStyle={styles.searchButton} />
+            <Button
+              onPress={handleSearch}
+              title="Search"
+              buttonStyle={styles.searchButton}
+            />
+            <Button
+              onPress={clearCurrentStorage}
+              title={clearBtnText}
+              buttonStyle={styles.clearButton}
+            />
           </ScreenContainer>
         );
     }
   };
-  return (
-    <View style={styles.container}>
-      <View>
-        {renderJobsView()}
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={clearCurrentStorage}
-          title="Clear Storage"
-          buttonStyle={styles.clearButton}
-        />
-      </View>
-    </View>
-  );
+  return <View style={styles.container}>{renderJobsView()}</View>;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "gold",
-  },
-  searchStyling: {
-    width: "100%",
-    paddingLeft: "20%",
-    paddingRight: "20%",
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    paddingLeft: 10,
-  },
-  searchButton: {
-    backgroundColor: "#841584",
-    borderRadius: 15,
-    width: "100%",
-  },
-  buttonContainer: {
-    paddingLeft: "20%",
-    paddingRight: "20%",
-  },
-  clearButton: {
-    backgroundColor: "#841584",
-    borderRadius: 15,
-    marginTop: 20,
-  },
-  backButton: {
-    backgroundColor: "#841584",
-    borderRadius: 15,
-    marginTop: 20,
-  },
-});

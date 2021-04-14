@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { SavedOrRejectedJobs } from "./components/SavedOrRejectedJobs";
-import { SearchForJobs } from "./components/SearchForJobs";
+import { SearchForJobs } from "./components/SearchForJobs/SearchForJobs";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";

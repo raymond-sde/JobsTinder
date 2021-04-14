@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Swiper from "react-native-deck-swiper";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { JobCard } from "../JobCard/JobCard";
-import { styles, overlayLabels } from "./styles";
+import { overlayLabels } from "./styles";
 import { Job } from "../Job";
 import { JobStatus } from "../JobStatus";
 import { useRenderedJobsData } from "../../hooks/useStorageJobs";
@@ -25,7 +25,7 @@ export const SwipeForJobs = (props: SwipeForJobsProps) => {
   };
 
   return renderedJobs.length ? (
-    <View key={index} style={styles.container}>
+    <View key={index}>
       <Swiper
         cards={renderedJobs}
         cardIndex={0}
